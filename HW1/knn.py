@@ -77,10 +77,13 @@ class KNNClassifier:
            with distances between each test and each train sample
         """
 
-        """
-        YOUR CODE IS HERE
-        """
-        pass
+        self.test_X = X
+        num_test = np.shape(self.test_X)[0]
+        num_train = np.shape(self.train_X)[0]
+        dists = np.zeros((num_test, num_train))
+        for i in range(num_test):
+            dists[i, :] = np.sum(np.abs(self.train_X - self.test_X[i,:]), axis = 1)
+        return dists
 
 
     def compute_distances_no_loops(self, X):
