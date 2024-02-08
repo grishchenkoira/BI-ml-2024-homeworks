@@ -100,9 +100,9 @@ class KNNClassifier:
         """
 
         self.test_X = X
-        reshaped_X_test = self.test_X[:, np.newaxis, :]
-        reshaped_X_train = self.train_X[np.newaxis, :, :]
-        dists = np.sum(np.abs(reshaped_X_test - reshaped_X_train), axis=2)
+        num_test = np.shape(self.test_X)[0]
+        num_train = np.shape(self.train_X)[0]
+        dists = np.abs(self.test_X[:,None] - self.train_X).sum(-1)
         return dists
 
 
@@ -121,11 +121,12 @@ class KNNClassifier:
         n_train = distances.shape[1]
         n_test = distances.shape[0]
         prediction = np.zeros(n_test)
-
-        """
-        YOUR CODE IS HERE
-        """
-        pass
+        for i in range(n_test):
+            closest_y = []
+            min_index = np.argsort(distances[i, :])[:self.k]
+            closest_y = self.train_y[min_index]
+            prediction[i] = np.bincount(closest_y).argmax()
+        return prediction
 
 
     def predict_labels_multiclass(self, distances):
