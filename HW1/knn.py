@@ -123,9 +123,9 @@ class KNNClassifier:
         prediction = np.zeros(n_test)
         for i in range(n_test):
             closest_y = []
-            min_index = np.argsort(distances[i, :])[:self.k]
-            closest_y = self.train_y[min_index]
-            prediction[i] = np.bincount(closest_y).argmax()
+            distance = np.argsort(distances[i])[:self.k]
+            closest_y = self.train_y[distance]
+            prediction[i] = np.argmax(np.bincount(closest_y))
         return prediction
 
 
@@ -143,9 +143,11 @@ class KNNClassifier:
 
         n_train = distances.shape[0]
         n_test = distances.shape[0]
-        prediction = np.zeros(n_test, np.int)
+        prediction = np.zeros(n_test)
+        for i in range(n_test):
+            closest_y = []
+            min_index = np.argsort(distances[i, :])[:self.k]
+            closest_y = self.train_y[min_index]
+            prediction[i] = np.argmax(np.bincount(closest_y))
+        return prediction
 
-        """
-        YOUR CODE IS HERE
-        """
-        pass
